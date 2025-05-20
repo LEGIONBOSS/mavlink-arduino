@@ -45,5 +45,5 @@ sequenceDiagram
 ```
 
 ## Sources
-- ID assignment protocol https://mavlink.io/en/services/mavlink_id_assignment.html
+- ID assignment protocol: https://mavlink.io/en/services/mavlink_id_assignment.html
 - HEARTBEAT message: https://mavlink.io/en/messages/common.html#HEARTBEAT
