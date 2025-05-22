@@ -14,11 +14,9 @@ sequenceDiagram
     end
     AP ->>+ AR: 1st HEARTBEAT
     AR ->>- AP: BATTERY_INFO
-    opt any time
-        AP ->>+ AR: COMMAND_LONG-<br>REQUEST_MESSAGE<br>(BATTERY_INFO)
-        AR ->> AP: BATTERY_INFO
-        AR ->>- AP: COMMAND_ACK
-    end
+    AP ->>+ AR: COMMAND_LONG-<br>REQUEST_MESSAGE<br>(BATTERY_INFO)
+    AR ->> AP: BATTERY_INFO
+    AR ->>- AP: COMMAND_ACK
     loop 1Hz
         AR ->> AP: HEARTBEAT<br>(MAV_TYPE_BATTERY)
     end
