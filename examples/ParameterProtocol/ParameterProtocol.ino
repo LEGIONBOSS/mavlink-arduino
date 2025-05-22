@@ -34,7 +34,7 @@ int32_t param_index_from_name(char* name)
     }
 }
 
-bool param_exists(uint16_t index, char* name)
+bool param_exists(int32_t index, char* name)
 {
     if (index < 0)
     {
@@ -42,25 +42,21 @@ bool param_exists(uint16_t index, char* name)
     }
     else
     {
-        return index < param_num
-            && strcmp(name, param_names[index]) == 0;
+        return (uint16_t)index < param_num
+            && strcmp(name, param_names[(uint16_t)index]) == 0;
     }
 }
 
-void param_set(char* name, int32_t value)
+void param_set(int32_t index, char* name, int32_t value)
 {
-    if (param_index_from_name(name) != -1)
+    if (param_exists(index, name))
     {
-        param_values[i] = value;
-    }
-}
-
-void param_set_local(uint16_t index, int32_t value)
-{
-    if (index < param_num)
-    {
-        param_values[index] = value;
-        param_send_flags[index] = true;
+        if (index == -1)
+        {
+            index = param_index_from_name(name);
+        }
+        param_values[(uint16_t)index] = value;
+        param_send_flags[(uint16_t)index] = true;
     }
 }
 
@@ -103,7 +99,7 @@ void mavlink_read()
                             || param_request_read.target_system == 0)                                 // Sent to all systems
                         && (param_request_read.target_component == comp_id                            // Sent to this component
                             || param_request_read.target_component == MAV_COMP_ID_ALL)                // Sent to all components
-                        && param_exists(param_request_read.param_index, param_request_read.param_id)) // Param exists
+                        && param_exists((int32_t)param_request_read.param_index, param_request_read.param_id)) // Param exists
                     {
                         int32_t index = (int32_t)param_request_read.param_index;
                         if (index == -1)
@@ -131,8 +127,7 @@ void mavlink_read()
                         && param_exists(-1, param_set.param_id)               // Param exists
                         && param_set.param_type == MAV_PARAM_TYPE_INT32)      // Param has correct type
                     {
-                        param_set(param_set.param_id, (int32_t)param_set.param_value);
-                        param_send_flags[(uint16_t)param_index_from_name(param_set.param_id)] = true;
+                        param_set(-1, param_set.param_id, (int32_t)param_set.param_value);
 
                         Serial.print("New parameter value (");
                         Serial.print(param_set.param_id);
