@@ -19,6 +19,10 @@ sequenceDiagram
         end
     end
     note over AR: Set SysID (10)
+    loop Later HEARTBEATs
+        AP ->> AR: Nth HEARTBEAT
+        note over AR: Keep SysID (10)
+    end
 ```
 
 ## Case 2: Multiple Autopilots in the system (System ID conflict)
@@ -42,6 +46,11 @@ sequenceDiagram
         note over AR: Detect conflicting SysID (20),<br>break out of System ID acquisition
     end
     note over AR: Keep initial SysID (1)
+    loop Later HEARTBEATs
+        AP1 ->> AR: Nth HEARTBEAT
+        AP2 ->> AR: Nth HEARTBEAT
+        note over AR: Keep SysID (1)
+    end
 ```
 
 ## Sources
